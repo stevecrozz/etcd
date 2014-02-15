@@ -75,8 +75,11 @@ func TestRemoveNode(t *testing.T) {
 			etcds[2].Kill()
 			fmt.Println("kill node3 and wait for its exiting")
 			etcds[2].Wait()
+			fmt.Println("kill node3 finish")
 
+			fmt.Println("client do start")
 			client.Do(rmReq)
+			fmt.Println("client do finish")
 
 			resp, err := c.Get("_etcd/machines", false, false)
 

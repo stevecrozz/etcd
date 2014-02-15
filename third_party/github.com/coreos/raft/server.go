@@ -787,13 +787,17 @@ func (s *server) leaderLoop() {
 			} else {
 				switch req := e.target.(type) {
 				case Command:
+					s.debugln("Leader is handling command")
 					s.processCommand(req, e)
 					continue
 				case *AppendEntriesRequest:
+					s.debugln("Leader is handling appendentries request")
 					e.returnValue, _ = s.processAppendEntriesRequest(req)
 				case *AppendEntriesResponse:
+					s.debugln("Leader is handling appendentries response")
 					s.processAppendEntriesResponse(req)
 				case *RequestVoteRequest:
+					s.debugln("Leader is handling requestvote request")
 					e.returnValue, _ = s.processRequestVoteRequest(req)
 				}
 			}
@@ -1346,7 +1350,8 @@ func (s *server) readConf() error {
 //--------------------------------------
 
 func (s *server) debugln(v ...interface{}) {
-	if logLevel > Debug {
+	// if logLevel > Debug {
+	if true {
 		debugf("[%s Term:%d] %s", s.name, s.Term(), fmt.Sprintln(v...))
 	}
 }

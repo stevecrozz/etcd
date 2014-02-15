@@ -74,7 +74,8 @@ func debug(v ...interface{}) {
 // Prints to the standard logger if debug mode is enabled. Arguments
 // are handled in the manner of fmt.Printf.
 func debugf(format string, v ...interface{}) {
-	if logLevel >= Debug {
+//	if logLevel >= Debug {
+	if true {
 		logger.Printf(format, v...)
 	}
 }

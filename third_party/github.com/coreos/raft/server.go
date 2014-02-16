@@ -1058,10 +1058,12 @@ func (s *server) RemovePeer(name string) error {
 			return fmt.Errorf("raft: Peer not found: %s", name)
 		}
 
+		s.debugln("server.peer.remove stop heartbeat: ", name, len(s.peers))
 		// Stop peer and remove it.
 		if s.State() == Leader {
 			peer.stopHeartbeat(true)
 		}
+		s.debugln("server.peer.remove stop heartbeat finish: ", name, len(s.peers))
 
 		delete(s.peers, name)
 
@@ -1071,6 +1073,7 @@ func (s *server) RemovePeer(name string) error {
 	// Write the configuration to file.
 	s.writeConf()
 
+	s.debugln("server.peer.remove finish: ", name, len(s.peers))
 	return nil
 }
 

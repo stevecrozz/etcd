@@ -79,7 +79,7 @@ func (p *Peer) setPrevLogIndex(value uint64) {
 
 // Starts the peer heartbeat.
 func (p *Peer) startHeartbeat() {
-	p.stopChan = make(chan bool)
+	p.stopChan = make(chan bool, 1)
 	c := make(chan bool)
 	go p.heartbeat(c)
 	<-c
@@ -87,7 +87,13 @@ func (p *Peer) startHeartbeat() {
 
 // Stops the peer heartbeat.
 func (p *Peer) stopHeartbeat(flush bool) {
-	p.stopChan <- flush
+	// non-blocking send to avoid deadlock
+	// buffer size of 1 ensures that we can always receive the 1st one
+	// And only the 1st one matters
+	select {
+	case p.stopChan <- flush:
+	default:
+	}
 }
 
 //--------------------------------------

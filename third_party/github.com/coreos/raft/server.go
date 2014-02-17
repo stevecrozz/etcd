@@ -505,6 +505,7 @@ func (s *server) setCurrentTerm(term uint64, leaderName string, append bool) {
 		// stop heartbeats before step-down
 		if s.state == Leader {
 			s.mutex.Unlock()
+			s.debugln("server.set.currentTerm stop heartbeat")
 			for _, peer := range s.peers {
 				peer.stopHeartbeat(false)
 			}
@@ -780,6 +781,7 @@ func (s *server) leaderLoop() {
 		case e := <-s.c:
 			if e.target == &stopValue {
 				// Stop all peers before stop
+				s.debugln("server.leaderloop stop heartbeat")
 				for _, peer := range s.peers {
 					peer.stopHeartbeat(false)
 				}

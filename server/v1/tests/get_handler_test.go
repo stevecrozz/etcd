@@ -89,6 +89,7 @@ func TestV1WatchKey(t *testing.T) {
 		c := make(chan bool)
 		go func() {
 			resp, _ := tests.Get(fmt.Sprintf("%s%s", s.URL(), "/v1/watch/foo/bar"))
+			c <- true
 			body = tests.ReadBodyJSON(resp)
 			c <- true
 		}()
@@ -113,6 +114,7 @@ func TestV1WatchKey(t *testing.T) {
 			t.Fatal("cannot get watch result")
 		}
 
+		<-c
 		assert.NotNil(t, body, "")
 		assert.Equal(t, body["action"], "set", "")
 
